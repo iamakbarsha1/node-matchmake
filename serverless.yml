@@ -1,0 +1,44 @@
+service: node-matchmake
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  versionFunctions: false # removes the previous saved lambda functio
+  stage: "dev" # diff staging like prod, qa, stage
+  region: us-east-1
+  httpApi:
+    cors: true
+    # payload: "2.0"
+    # disableDefaultEndpoint: false
+  environment:
+    MONGODB_URI: ${env:MONGODB_URI}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "dynamodb:*"
+      Resource: "*"
+
+functions:
+  app:
+    handler: src/handler.handler
+    events:
+      - http:
+          path: /items
+          method: any
+      - http:
+          path: /items/{id}
+          method: get
+      - http:
+          path: /items/{id}
+          method: put
+      - http:
+          path: /items/{id}
+          method: delete
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+custom:
+  dotenv:
+    path: .env
