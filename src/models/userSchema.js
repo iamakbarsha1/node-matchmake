@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 
+const validateAge = () => {
+  return (value) => value.toLowerCase() === "male" || "female";
+};
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -27,10 +31,7 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       required: [true, "Gender is requred!"],
-      validate: [
-        (value) => value.toLowerCase() === "male" || "female",
-        "Gender should be either Male or Female!",
-      ],
+      validate: [validateAge, "Gender should be either Male or Female!"],
     },
     age: {
       type: Number,
