@@ -20,7 +20,8 @@ provider:
 
 functions:
   app:
-    handler: src/handler.handler
+    handler: src/handler.handler 
+    timeout: 30 # Increase timeout to 30 seconds
     events:
       - http:
           path: /items
@@ -40,5 +41,9 @@ plugins:
   - serverless-offline
 
 custom:
+  serverless-offline:
+    httpPort: 3000 # Change this if you want a different port
+    lambdaPort: 3002
+    noTimeout: false
   dotenv:
     path: .env
