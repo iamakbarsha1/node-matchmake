@@ -1,3 +1,0 @@
-services:
-  user-service:
-    path: user-service

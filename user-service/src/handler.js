@@ -1,3 +1,4 @@
+// for AWS Lambda
 const serverless = require("serverless-http");
 const app = require("./server");
 
