@@ -6,6 +6,11 @@ provider:
   versionFunctions: false # removes the previous saved lambda functio
   stage: "dev" # diff staging like prod, qa, stage
   region: us-east-1
+  apiGateway:
+    restApiId:
+      "Fn::ImportValue": SharedGW-restApiId
+    restApiRootResourceId:
+      "Fn::ImportValue": SharedGW-rootResourceId
   httpApi:
     cors: true
     # payload: "2.0"
