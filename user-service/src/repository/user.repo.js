@@ -1,6 +1,7 @@
 const userSchema = require("../models/userSchema");
 
 exports.findOneByEmail = async (email) => {
+  console.log("findOneByEmail: " + email);
   return await userSchema.findOne({ email });
 };
 
@@ -10,6 +11,9 @@ exports.findOneByUsername = async (username) => {
 
 exports.createNewUser = async (userData) => {
   const user = new userSchema(userData);
-  const savedUser = await user.save();
-  res.status(201).json(savedUser);
+  return await user.save();
+};
+
+exports.validatePassword = async (email, username, password) => {
+  const exisitngUser = await userSchema.findOne({ email });
 };

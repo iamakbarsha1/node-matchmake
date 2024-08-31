@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-const validateAge = () => {
+const validateGender = () => {
   return (value) => value.toLowerCase() === "male" || "female";
 };
 
@@ -31,7 +32,7 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       required: [true, "Gender is requred!"],
-      validate: [validateAge, "Gender should be either Male or Female!"],
+      validate: [validateGender, "Gender should be either 'male' or 'female'!"],
     },
     age: {
       type: Number,
@@ -44,5 +45,27 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Pre-save hook to hash the password
+userSchema.pre("save", function (next) {
+  const user = this;
+
+  // Check if password exists
+  if (!user.password) {
+    return next(new Error("Password is required"));
+  }
+
+  // only hash the password if it has been modified (or is new)
+  if (!user.isModified("password")) return next();
+
+  // Generate a salt and hash the password
+  bcrypt.hash(user.password, 8, (err, hash) => {
+    if (err) return next(err);
+
+    // Replace the plain text with the hash
+    user.password = hash;
+    next();
+  });
+});
 
 module.exports = mongoose.model("User", userSchema);
