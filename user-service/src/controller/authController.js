@@ -3,7 +3,7 @@ const {
   findOneByUsername,
   createNewUser,
 } = require("../repository/user.repo");
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 
 exports.signup = async (req, res) => {
   const { email, username, phone, password, age, gender } = req.body;
@@ -92,7 +92,7 @@ exports.login = async (req, res) => {
         }
 
         // Validate the password using callback style
-        // bcrypt.compare(
+        // bcryptjs.compare(
         //   password,
         //   user.password,
         //   function (err, isPasswordValid) {

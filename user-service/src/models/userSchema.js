@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 
 const validateGender = () => {
   return (value) => value.toLowerCase() === "male" || "female";
@@ -59,7 +59,7 @@ userSchema.pre("save", function (next) {
   if (!user.isModified("password")) return next();
 
   // Generate a salt and hash the password
-  bcrypt.hash(user.password, 8, (err, hash) => {
+  bcryptjs.hash(user.password, 8, (err, hash) => {
     if (err) return next(err);
 
     // Replace the plain text with the hash
