@@ -42,8 +42,21 @@ const userSchema = new mongoose.Schema(
       ],
       required: [true, "Age is required!"],
     },
+    loginCount: {
+      type: Number,
+      default: 0,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    virtuals: {
+      fullName: {
+        get() {
+          return this.firstName + " " + this.lastName;
+        },
+      },
+    },
+  }
 );
 
 // Pre-save hook to hash the password

@@ -2,8 +2,10 @@ const {
   findOneByEmail,
   findOneByUsername,
   createNewUser,
+  updateLoginCountAndToken,
 } = require("../repository/user.repo");
 const bcryptjs = require("bcryptjs");
+const { generateToken } = require("../utils/token");
 
 exports.signup = async (req, res) => {
   const { email, username, phone, password, age, gender } = req.body;
@@ -80,7 +82,7 @@ exports.login = async (req, res) => {
       username ? findOneByUsername(username) : null,
     ]);
     let user = isEmailExist || isUsernameExist;
-
+    console.log("user:- " + user);
     if (user) {
       try {
         if (!user.password) {
@@ -143,19 +145,70 @@ exports.login = async (req, res) => {
         //   }
         // );
 
-        const existingUser = await validatePassword(email, username, password);
-      } catch (validationError) {}
+        // Validate the assword using callback style
+        bcryptjs.compare(
+          password,
+          user.password,
+          async (err, isPasswordValid) => {
+            if (err) {
+              return res.status(500).json({
+                code: 500,
+                key: "Error",
+                dsecrip: "Error validating credentials",
+              });
+            }
+            console.log("isPasswordValid: - " + isPasswordValid);
+
+            if (!isPasswordValid) {
+              return res.status(401).json({
+                code: 500,
+                key: "Error",
+                description: "Oops! Invalid credentials",
+              });
+            }
+
+            // Proceed with the login count update and resposne
+            const loginCount = isNaN(user.loginCount) ? 0 : user.loginCount;
+
+            // generate jwt token
+            const token = generateToken(user);
+
+            try {
+              // Update login count and token, then send response
+              await updateLoginCountAndToken(user, loginCount, token, res);
+            } catch (updateError) {
+              return res.status(500).json({
+                code: 500,
+                key: "Error",
+                description: "Error updating login count or token",
+                error: updateError.toString(),
+              });
+            }
+          }
+        );
+
+        // const existingUser = await validatePassword(email, username, password);
+        // console.log("existingUser:- " + JSON.stringify(existingUser));
+      } catch (validationError) {
+        console.error("Validation error: " + validationError);
+        return res.status(400).json({
+          code: 400,
+          key: "Validation Error",
+          error: validationError.message,
+          description: "Validation failed for the login request",
+        });
+      }
     }
 
     // if (email && isEmailExist) {
 
     // }
 
-    console.log("isEmailExist: " + JSON.stringify(isEmailExist));
-    console.log("isUsernameExist: " + JSON.stringify(isUsernameExist));
-    return res.status(200).json({
-      descrip: "login",
-    });
+    // console.log("isEmailExist: " + JSON.stringify(isEmailExist));
+    // console.log("isUsernameExist: " + JSON.stringify(isUsernameExist));
+    // return res.status(200).json({
+    //   descrip: "login",
+    // });
   } catch (err) {
     console.error("Error in login controller: " + err);
     // ErrorResponse(res, "Error", 500, err.toString(), "Error");
