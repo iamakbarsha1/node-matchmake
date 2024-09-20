@@ -26,6 +26,8 @@ provider:
 functions:
   app:
     handler: src/handler.handler
+    environment:
+      NODE_ENV: prod
     events:
       - http:
           path: /items
