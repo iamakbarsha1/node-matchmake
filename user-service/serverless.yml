@@ -39,6 +39,12 @@ functions:
       - http:
           path: /items/{id}
           method: delete
+      - http:
+          path: /signup
+          method: post
+      - http:
+          path: /login
+          method: post
 
 plugins:
   - serverless-dotenv-plugin
