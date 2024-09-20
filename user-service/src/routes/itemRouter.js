@@ -1,10 +1,10 @@
 const express = require("express");
 const itemSchema = require("../models/itemSchema");
 // const Item = require("../models/item");
-const router = express.Router();
+const ItemRouter = express.Router();
 
 // Create a new item
-router.post("/", async (req, res) => {
+ItemRouter.post("/", async (req, res) => {
   try {
     const item = new itemSchema(req.body);
     const savedItem = await item.save();
@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
 });
 
 // Get all items
-router.get("/", async (req, res) => {
+ItemRouter.get("/", async (req, res) => {
   try {
     const items = await itemSchema.find();
     res.json(items);
@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get one item
-router.get("/:id", async (req, res) => {
+ItemRouter.get("/:id", async (req, res) => {
   try {
     const item = await itemSchema.findById(req.params.id);
     if (!item) return res.status(404).json({ message: "Item not found" });
@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Update an item
-router.put("/:id", async (req, res) => {
+ItemRouter.put("/:id", async (req, res) => {
   try {
     const item = await itemSchema.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -49,7 +49,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete an item
-router.delete("/:id", async (req, res) => {
+ItemRouter.delete("/:id", async (req, res) => {
   try {
     const item = await itemSchema.findByIdAndDelete(req.params.id);
     if (!item) return res.status(404).json({ message: "Item not found" });
@@ -59,4 +59,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = ItemRouter;

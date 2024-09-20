@@ -40,10 +40,10 @@ functions:
           path: /items/{id}
           method: delete
       - http:
-          path: /signup
+          path: /user/signup
           method: post
       - http:
-          path: /login
+          path: /user/login
           method: post
 
 plugins:

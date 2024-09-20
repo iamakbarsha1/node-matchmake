@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const itemsRouter = require("./routes/itemRouter");
 const UserRouter = require("./routes/userRouter");
+const ItemRouter = require("./routes/itemRouter");
 require("dotenv").config();
 
 const port = 7000 || process.env.PORT;
@@ -31,7 +31,7 @@ const connectToDatabase = async () => {
 // Connect to database and use routes
 connectToDatabase();
 
-app.use("/items", itemsRouter);
+app.use("/items", ItemRouter);
 app.use("/user", UserRouter);
 
 app.listen(port, (res, err) => {
