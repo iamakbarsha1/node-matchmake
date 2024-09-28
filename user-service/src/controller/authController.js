@@ -174,6 +174,7 @@ exports.login = async (req, res) => {
             const token = generateToken(user);
 
             try {
+              console.log("run updateLoginCountAndToken: ");
               // Update login count and token, then send response
               await updateLoginCountAndToken(user, loginCount, token, res);
             } catch (updateError) {
