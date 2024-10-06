@@ -41,7 +41,7 @@ exports.updateLoginCountAndToken = async (user, loginCount, token, res) => {
 
     return res.status(200).json({
       code: 200,
-      description: `Hello ${user.fullName}` + ` ` + `${user.name}!`,
+      description: `Hello ${user.fullName} ${user.name}!`,
       data: "data - " + token,
       token: token,
     });
