@@ -2,11 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const UserRouter = require("./routes/userRouter");
 const ItemRouter = require("./routes/itemRouter");
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config({
-    path: `.env.${process.env.NODE_ENV}`,
-  });
-}
+require("dotenv").config();
+// if (process.env.NODE_ENV !== "production") {
+//   require("dotenv").config({
+//     path: `.env.${process.env.NODE_ENV}`,
+//   });
+// }
 
 const port = 7000 || process.env.PORT;
 
@@ -17,14 +18,17 @@ app.get("/", (req, res) => {
   res.json({ message: "Hello from Express on AWS Lambda - user-service!" });
 });
 
+console.log("process.env.MONGODB_URI_LOCAL: " + process.env.MONGODB_URI_LOCAL);
+console.log("process.env.NODE_ENV: " + process.env.NODE_ENV);
 // MongoDB connection
 const connectToDatabase = async () => {
   if (mongoose.connection.readyState === 0) {
     try {
       await mongoose.connect(
-        process.env.NODE_ENV !== "prod"
-          ? process.env.MONGODB_URI_LOCAL
-          : process.env.MONGODB_URI,
+        process.env.MONGODB_URI,
+        // process.env.NODE_ENV !== "prod"
+        //   ? process.env.MONGODB_URI_LOCAL
+        //   : process.env.MONGODB_URI,
         {
           useNewUrlParser: true,
           useUnifiedTopology: true,

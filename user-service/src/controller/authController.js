@@ -89,6 +89,7 @@ exports.login = async (req, res) => {
           return res.status(500).json({
             code: 500,
             key: "Error",
+            data: null,
             descrip: "Invalid credentials!",
           });
         }
@@ -154,6 +155,7 @@ exports.login = async (req, res) => {
               return res.status(500).json({
                 code: 500,
                 key: "Error",
+                data: null,
                 dsecrip: "Error validating credentials",
               });
             }
@@ -161,8 +163,9 @@ exports.login = async (req, res) => {
 
             if (!isPasswordValid) {
               return res.status(401).json({
-                code: 500,
+                code: 401,
                 key: "Error",
+                data: null,
                 description: "Oops! Invalid credentials",
               });
             }
