@@ -22,12 +22,19 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
     },
+    //! this below 'name' is marked as a bug -> alais, get, set value
     name: {
       type: String,
       index: true,
       alais: "fullName",
-      get: (value) => value.toUpperCase(),
-      set: (value) => value.toLowerCase(),
+      // get: (value) => value.toUpperCase(),
+      // set: (value) => value.toLowerCase(),
+    },
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
     },
     gender: {
       type: String,
@@ -53,6 +60,7 @@ const userSchema = new mongoose.Schema(
       fullName: {
         get() {
           return this.firstName + " " + this.lastName;
+          // return "test: - " + this.gender;
         },
       },
     },
