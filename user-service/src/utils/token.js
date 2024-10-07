@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwtSecretKey = process.env.JWT_SECRET;
 const jwtTimeout = process.env.JWT_TIMEOUT;
 
@@ -19,7 +20,8 @@ exports.generateToken = (user) => {
       expiresIn: jwtTimeout,
     };
   }
-
+  console.log("jwtSecretKey: - " + jwtSecretKey);
+  console.log("jwtTimeout: - " + jwtTimeout);
   // generate token
   const token = jwt.sign(payload, jwtSecretKey, options);
   return token;
