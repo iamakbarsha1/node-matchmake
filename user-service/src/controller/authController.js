@@ -3,12 +3,15 @@ const {
   findOneByUsername,
   createNewUser,
   updateLoginCountAndToken,
+  findOneById,
+  updateOneUser,
 } = require("../repository/user.repo");
 const bcryptjs = require("bcryptjs");
 const { generateToken } = require("../utils/token");
 
 exports.signup = async (req, res) => {
-  const { email, username, phone, password, age, gender } = req.body;
+  const { email, username, phone, password, age, gender, firstName, lastName } =
+    req.body;
 
   //   const hashedPassword =
   const userData = {
@@ -18,6 +21,8 @@ exports.signup = async (req, res) => {
     password, // This will be hashed by the pre-save hook
     age,
     gender,
+    firstName,
+    lastName,
   };
 
   try {
@@ -223,4 +228,31 @@ exports.login = async (req, res) => {
       descrip: "Error in login controller",
     });
   }
+};
+
+exports.getUser = async (req, res) => {
+  const userId = req.params._id;
+
+  const getUser = await findOneById(userId);
+  console.log("getUser: " + getUser);
+
+  //! Log specific parts of the request object to avoid circular references
+  // console.log("req.query: ", req.query); // Logs query parameters
+  // console.log("req.body: ", req.body); // Logs the request body
+  // console.log("req.params: ", req.params); // Logs URL parameters
+  // console.log("req.headers: ", req.headers); // Logs request headers
+
+  return res.status(200).json({
+    code: 200,
+    status: "success",
+    descrip: "User retrieved!",
+    data: getUser,
+  });
+};
+
+exports.updateUser = async (req, res) => {
+  const userId = req.params._id;
+  const userData = req.body;
+
+  const udpateUser = await updateOneUser(_id, userData);
 };
