@@ -47,6 +47,12 @@ functions:
       - http:
           path: /user/login
           method: post
+      - http:
+          path: /user/{_id}
+          method: get
+      - http:
+          path: /user/{_id}
+          method: put
 
 plugins:
   - serverless-dotenv-plugin
