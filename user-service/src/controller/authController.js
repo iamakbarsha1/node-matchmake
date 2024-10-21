@@ -8,6 +8,8 @@ const {
 } = require("../repository/user.repo");
 const bcryptjs = require("bcryptjs");
 const { generateToken } = require("../utils/token");
+const { safeStringify } = require("../utils/utils");
+const { generateOTP, sendVerificationEmail } = require("../utils/otp");
 
 exports.signup = async (req, res) => {
   const { email, username, phone, password, age, gender, firstName, lastName } =
@@ -51,6 +53,8 @@ exports.signup = async (req, res) => {
     if (user === null) {
       try {
         const savedUser = await createNewUser(userData);
+
+        await sendVerificationEmail(email, generateOTP());
         console.log("User created: " + savedUser._id);
         return res.status(201).json({
           code: 200,
@@ -251,8 +255,20 @@ exports.getUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-  const userId = req.params._id;
+  const _userId = req.params._id;
   const userData = req.body;
+  // console.log("_userId - " + _userId);
+  // console.log("userData - " + JSON.stringify(userData));
 
-  const udpateUser = await updateOneUser(_id, userData);
+  const updateUser = await updateOneUser(_userId, userData, res);
+  // console.log("updateUser - " + updateUser.name);
+  console.log("updateUser.body - " + updateUser.body);
+  console.log("------------");
+  console.log("updateUser - " + safeStringify(updateUser));
+};
+
+exports.otp = async (req, res) => {
+  const { email } = req.body;
+
+  await sendVerificationEmail(email, generateOTP(), res);
 };

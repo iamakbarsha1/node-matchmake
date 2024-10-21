@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
     },
+    otp: {
+      type: Number,
+    },
     //! this below 'name' is marked as a bug -> alais, get, set value
     name: {
       type: String,

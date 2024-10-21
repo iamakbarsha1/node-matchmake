@@ -11,6 +11,7 @@ UserRouter.post("/signup", authController.signup);
 UserRouter.post("/login", authController.login);
 UserRouter.get("/:_id", authController.getUser);
 UserRouter.put("/:_id", authController.updateUser);
+UserRouter.post("/otp", authController.otp);
 
 // UserRouter.post("/", async (req, res) => {
 //   try {

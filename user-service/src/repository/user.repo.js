@@ -43,30 +43,45 @@ exports.createNewUser = async (userData) => {
 //     console.log("Error while updating a user: " + err);
 //   }
 // };
-exports.updateOneUser = async (_id, data, res) => {
+exports.updateOneUser = async (_id, email, data, res) => {
   try {
+    // console.log("data - " + JSON.stringify(data));
     // Validate input
-    if (!_id || !data) {
+    if ((!_id && !email) || !data) {
       return res.status(400).json({
         code: 400,
-        description: "Invalid request: Missing _id or data",
+        description: "Invalid request: Missing _id/email/data",
       });
     }
 
     // Destructure data for readability
-    const { firstName, lastName, email } = data;
+    // const { firstName, lastName, email, otp } = data;
 
-    console.log(`Updating user with ID: ${_id}`);
+    // Prepare the query object
+    const query = {};
+    if (_id) query._id = _id; // Add _id to query if provided
+    if (email) query.email = email; // Add email to query if provided
 
+    console.log(`Updating user with query: ${JSON.stringify(query)}`);
+
+    const updateFields = {};
+    for (const key in data) {
+      if (data[key] !== undefined) {
+        updateFields[key] = data[key];
+      }
+    }
+    // console.log("updateFields - " + JSON.stringify(updateFields));
     // Update user in the database
     const updateUser = await userSchema.updateOne(
-      { _id }, // shorthand for _id: _id
+      query,
+      // { _id }, // shorthand for _id: _id
       {
-        $set: {
-          firstName,
-          lastName,
-          email,
-        },
+        $set: updateFields,
+        // $set: {
+        //   firstName,
+        //   lastName,
+        //   email,
+        // },
       }
     );
 
@@ -136,3 +151,5 @@ exports.updateLoginCountAndToken = async (user, loginCount, token, res) => {
     });
   }
 };
+
+// exports.findOneByEmailAndUpdate = async (email, data, res) => {};

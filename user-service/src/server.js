@@ -17,7 +17,7 @@ require("dotenv").config({
 const port = 7000 || process.env.PORT;
 
 const app = express();
-app.use(express.json());
+app.use(express.json()); // Middleware to parse JSON body
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello from Express on AWS Lambda - user-service!" });
